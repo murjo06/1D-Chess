@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "start": "npx tsc && node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.18",
+    "@types/node": "^20.8.0",
+    "typescript": "^5.2.2"
+  },
+  "name": "1d-chess",
+  "description": "A 1-dimensional chess engine",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murjo06/1D-Chess.git"
+  },
+  "author": "murjo06",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/murjo06/1D-Chess/issues"
+  },
+  "homepage": "https://github.com/murjo06/1D-Chess#readme"
+}

@@ -10,9 +10,11 @@
     align-items: center;
     background-position: center;
     background-size: contain;
+    position: relative;
 }
 .square > img {
     cursor: pointer;
+    width: 100%;
 }
 .square:nth-of-type(2n - 1) {
     background-color: rgb(181, 136, 99);
@@ -20,13 +22,23 @@
 .square:nth-of-type(2n) {
     background-color: rgb(240, 217, 181);
 }
-.chess-piece {
-    width: 100%;
-    height: 100%;
+.highlighted-square:nth-of-type(2n - 1) {
+    background-color: rgb(219, 195, 73) !important;
+}
+.highlighted-square:nth-of-type(2n) {
+    background-color: rgb(248, 236, 117) !important;
 }
 .legal-move {
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(0, 0, 0, 0.1);
     width: 35%;
     height: 35%;
+    border-radius: 50%;
+    position: absolute;
+}
+.legal-move-piece {
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    position: absolute;
     border-radius: 50%;
 }
