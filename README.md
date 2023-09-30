@@ -4,4 +4,4 @@ Any installation on a different system will require the creation of a new `node_
 ```
 npm install express dotenv && npm install -D typescript @types/express @types/node
 ```
-This command also installes the neccesary dependencies, `express` and `dotenv`, as well as the dev depencencies and types, `typescript`, `@types/express` and `@types/node`.
+This command also installs the neccesary dependencies, `express` and `dotenv`, as well as the dev depencencies and types, `typescript`, `@types/express` and `@types/node`.
