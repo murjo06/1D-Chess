@@ -1,7 +1,3 @@
-//! THIS SCRIPT IS DEPRECATED, DO NOT USE IN PRODUCTION
-
-
-/*
 const pieceURL = "https://www.chess.com/chess-themes/pieces/neo/150/";
 const boardTemplate = ["wk", "wn", "wr", "", "", "", "br", "bn", "bk", ""];
 const colors = ["rgb(181, 136, 99)", "rgb(240, 217, 181)"];
@@ -10,31 +6,13 @@ let board = boardTemplate;
 let highlightedSquare;
 let currentLegalMoves = [];
 const boardHTML = document.querySelector("#chess-board");
+const over = document.querySelector("#game-over");
 let currentSquare = 9;
 let turn = "w";
-
-function getPiecePosition(piece) {
-    for(let i = 0; i < board.length; i++) {
-        if(board[i] == piece) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-const socket = new WebSocket("ws://localhost:3000");
-socket.onopen = () => {
-    console.log("socket open");
-};
-socket.onmessage = (message) => {
-    let piece = message.data.split("_");
-    movePiece(board, getPiecePosition(parseInt(piece[0])), parseInt(piece[1]), true);
-}
 
 for(let i = 0; i < boardTemplate.length - 1; i++) {
     boardHTML.children[i].setAttribute("piece", boardTemplate[i]);
     boardHTML.children[i].addEventListener("click", function() {
-        if(getLegalMoves("k", board[board.indexOf("wk")])) {}
         let match = 0;
         let square = 0;
         for(let j = 0; j < boardHTML.childElementCount; j++) {
@@ -55,9 +33,8 @@ for(let i = 0; i < boardTemplate.length - 1; i++) {
             }
         }
         for(let n = 0; n < 2; n++) {
-            let moves = getLegalMoves(board[square][1], square, color);
-            for(let k = 0; k < moves[n].length; k++) {
-                let move = moves[n][k];
+            for(let k = 0; k < getLegalMoves(board[square][1], square, color)[n].length; k++) {
+                let move = getLegalMoves(board[square][1], square, color)[n][k];
                 if(move == match && currentSquare != 9) {
                     legalMove = true;
                     currentLegalMoves.push(move);
@@ -92,6 +69,7 @@ for(let i = 0; i < boardTemplate.length - 1; i++) {
                 boardHTML.children[match].style.background = selectedColors[match % 2];
             }
         }
+        isOpressed(currentSquare, color, true);
     });
     if(boardTemplate[i] != "") {
         let piece = document.createElement("img");
@@ -101,22 +79,19 @@ for(let i = 0; i < boardTemplate.length - 1; i++) {
     }
 }
 function getHint() {
-    let hint = document.createElement("div");
+    var hint = document.createElement("div");
     hint.classList.add("legal-move");
     return hint;
 }
-function movePiece(position, start, end, server = false) {
-    let pos = position;
+function movePiece(position, start, end) {
+    var pos = position;
     pos[end] = pos[start];
     pos[start] = "";
-    if(!server) {
-        socket.send(`${board[start]}_${end}`);
-    }
     return pos;
 }
 function getLegalMoves(piece, position, color) {
-    let before = [];
-    let after = [];
+    var before = [];
+    var after = [];
     if(piece == "r") {
         try {
             for(let i = 0; i < position - 1; i++) {
@@ -170,7 +145,6 @@ function getLegalMoves(piece, position, color) {
                 before.push(position + 1);
             }
         } catch {}
-        console.log([before, after]);
         return [before, after];
     }
 }
@@ -192,7 +166,8 @@ function updateBoard(update) {
 }
 function isOpressed(square, color, mate) {
     if(!mate) {
-        let rook = getLegalMoves("r", board.indexOf(`${color}r`), color);
+        let oppositeColor = (color == "w") ? "b" : "w";
+        let rook = getLegalMoves("r", board.indexOf(`${oppositeColor}r`), oppositeColor);
         for(let i = 0; i < rook.length; i++) {
             for(let k = 0; k < rook[i].length; k++) {
                 if(square == rook[i][k]) {
@@ -200,7 +175,7 @@ function isOpressed(square, color, mate) {
                 }
             }
         }
-        let knight = getLegalMoves("n", board.indexOf(`${color}n`), color);
+        let knight = getLegalMoves("n", board.indexOf(`${oppositeColor}n`), oppositeColor);
         for(let i = 0; i < knight.length; i++) {
             for(let k = 0; k < knight[i].length; k++) {
                 if(square == knight[i][k]) {
@@ -208,12 +183,34 @@ function isOpressed(square, color, mate) {
                 }
             }
         }
-        let oppositeColor = (color == "w") ? "b" : "w";
         let king = board.indexOf(`${oppositeColor}k`);
-        if(square == king || square == king + 1 || square - 1) {
+        if(square == king || square == king + 1 || square == king - 1) {
             return true;
         }
         return false;
+    } else {
+        let king = board.indexOf(`${color}k`);
+        let check = isOpressed(king, color, false);
+        if(check) {
+            let possibleSquares = [];
+            if(king == 8) {
+                possibleSquares = [king - 1];
+            } else if(king == 0) {
+                possibleSquares = [king + 1];
+            }
+            let allOppressed = true;
+            for(let k = 0; k < possibleSquares.length; k++) {
+                if(!isOpressed(possibleSquares[k], color, false)) {
+                    allOppressed = false;
+                }
+            }
+            if(allOppressed) {
+                over.style.display = "block";
+                over.textContent = ((color == "w") ? "White" : "Black") + " has lost";
+                if(color == "b") {
+                    over.textContent += ". Just like the 1800s!";
+                }
+            }
+        }
     }
 }
-*/
